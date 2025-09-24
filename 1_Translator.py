@@ -6,7 +6,13 @@ import os
 import gdown
 from PIL import Image
 import tempfile
+import tensorflow as tf
+tf.get_logger().setLevel('ERROR')
 
+import warnings
+warnings.filterwarnings('ignore')
+
+tf.config.set_visible_devices([], 'GPU')
 # ==============================
 # Page Config
 # ==============================
@@ -276,6 +282,7 @@ with st.sidebar.expander("Debug Info"):
     st.write("Model input shape:", model.input_shape)
     st.write("Model output shape:", model.output_shape)
     st.write("Number of classes:", len(label_map))
+
 
 
 
