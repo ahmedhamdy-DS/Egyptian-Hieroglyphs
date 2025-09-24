@@ -57,7 +57,7 @@ body {
 # Hero Image
 # ==============================
 st.image(
-    "assets/Egyptian_hieroglyphics.jpg",
+    "https://i.pinimg.com/1200x/16/3f/2e/163f2eb69aceaf6bf428a01e9ecacdd1.jpg",
     caption="✨ Ancient Egyptian hieroglyphic inscriptions ✨",
     width=700
 )
@@ -116,7 +116,7 @@ with col1:
     """, unsafe_allow_html=True)
 
 with col2:
-    st.image("assets/Egypt_bookofthedead.jpg",
+    st.image("https://i.pinimg.com/736x/2f/98/f2/2f98f2fe3612f315158e1a9b3108cb76.jpg",
              caption="Book of the Dead – Osiris receiving the righteous",
              use_container_width=True)
 
@@ -141,7 +141,7 @@ with col3:
     """, unsafe_allow_html=True)
 
 with col4:
-    st.image("assets/حجر رشيد2.jpg",
+    st.image("https://i.pinimg.com/736x/44/2d/03/442d03e1a7955aa8e9b75a294df0939d.jpg",
              caption="The Rosetta Stone – key to deciphering hieroglyphs",
              use_container_width=True)
 
@@ -194,6 +194,7 @@ st.markdown("""
 # Footer
 # ==============================
 st.markdown('<div class="footer">✅ Explore Egyptian culture and try the translation tool in the next page!</div>', unsafe_allow_html=True)
+
 
 
 
