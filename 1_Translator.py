@@ -203,33 +203,31 @@ st.markdown("---")
 st.subheader("📸 Hieroglyph Translator")
 st.write("Upload a photo of a hieroglyph, and our AI model will predict its meaning.")
 
+import tempfile  
+
 uploaded_file = st.file_uploader("Upload a hieroglyph image", type=["jpg", "jpeg", "png"], key="file_uploader")
 
 if uploaded_file is not None:
-    # عرض الصورة المرفوعة
-    col1, col2 = st.columns([1, 2])
+    st.image(uploaded_file, caption="Uploaded Hieroglyph", use_container_width=True)
     
-    with col1:
-        st.image(uploaded_file, caption="Uploaded Hieroglyph", use_container_width=True)
+    # حفظ الصورة مؤقتاً باستخدام tempfile
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp:
+        tmp.write(uploaded_file.getbuffer())
+        temp_path = tmp.name
+
+    # عرض مؤشر التحميل
+    with st.spinner("🔮 Analyzing hieroglyph..."):
+        code, name, desc, confidence = predict_image(temp_path)
     
-    with col2:
-        # التحليل مباشرة من uploaded file بدون حفظ
-        with st.spinner("🔮 Analyzing hieroglyph..."):
-            code, name, desc, confidence = predict_image(uploaded_file)
+    if code != "Error":
+        st.markdown(f"### 🔮 Prediction: **{name}** ({code})")
+        st.markdown(f"**Confidence:** {confidence:.2%}")
         
-        if code != "Error":
-            st.markdown(f"### 🔮 Prediction: **{name}** ({code})")
-            st.markdown(f"**Confidence:** {confidence:.2%}")
-            
-            if confidence > 0.1:  # إذا كانت الثقة معقولة
-                st.success("✅ Confident prediction!")
-            else:
-                st.warning("⚠️ Low confidence prediction")
-            
-            if st.button("📖 Show Meaning", key="meaning_btn"):
-                st.info(desc)
-        else:
-            st.error(f"❌ {name}")
+        if st.button("📖 Show Meaning", key="meaning_btn"):
+            st.info(desc)
+    else:
+        st.error(f"❌ {name}")
+
 
 # ==============================
 # Museum Gallery
@@ -282,6 +280,7 @@ with st.sidebar.expander("Debug Info"):
     st.write("Model input shape:", model.input_shape)
     st.write("Model output shape:", model.output_shape)
     st.write("Number of classes:", len(label_map))
+
 
 
 
