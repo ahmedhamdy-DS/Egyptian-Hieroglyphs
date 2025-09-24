@@ -25,7 +25,7 @@ if not os.path.exists(MODEL_PATH):
 model = load_model(MODEL_PATH)
 
 # ==============================
-# Label Map (يجب أن يتطابق مع تدريب النموذج)
+# Label Map 
 # ==============================
 label_map = {
     0: "N14", 1: "D2", 2: "L1", 3: "R1", 4: "F9",
@@ -248,9 +248,10 @@ st.info("""
 - The system used **over 700 symbols** by the Late Period.
 """)
 
-# تنظيف الملف المؤقت
+
 if os.path.exists("temp_hieroglyph.jpg"):
     os.remove("temp_hieroglyph.jpg")
+
 
 
 
