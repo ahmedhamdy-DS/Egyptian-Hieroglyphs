@@ -4,6 +4,8 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import os
 import gdown
+from PIL import Image
+import tempfile
 
 # ==============================
 # Page Config
@@ -11,18 +13,27 @@ import gdown
 st.set_page_config(page_title="Egyptian Hieroglyphs", layout="wide")
 
 # ==============================
-# Load Model
+# Load Model with caching
 # ==============================
-MODEL_DIR = "model"
-MODEL_FILE = "InceptionV3_model.h5"
-MODEL_PATH = os.path.join(MODEL_DIR, MODEL_FILE)
+@st.cache_resource
+def load_my_model():
+    MODEL_DIR = "model"
+    MODEL_FILE = "InceptionV3_model.h5"
+    MODEL_PATH = os.path.join(MODEL_DIR, MODEL_FILE)
 
-if not os.path.exists(MODEL_PATH):
-    os.makedirs(MODEL_DIR, exist_ok=True)
-    url = "https://huggingface.co/sonic222/Egyptian-Hieroglyphs/resolve/main/InceptionV3_model.h5"
-    gdown.download(url, MODEL_PATH, quiet=False)
+    if not os.path.exists(MODEL_PATH):
+        os.makedirs(MODEL_DIR, exist_ok=True)
+        url = "https://huggingface.co/sonic222/Egyptian-Hieroglyphs/resolve/main/InceptionV3_model.h5"
+        gdown.download(url, MODEL_PATH, quiet=False)
+    
+    return load_model(MODEL_PATH)
 
-model = load_model(MODEL_PATH)
+try:
+    model = load_my_model()
+    st.sidebar.success("✅ Model loaded successfully!")
+except Exception as e:
+    st.error(f"❌ Error loading model: {e}")
+    st.stop()
 
 # ==============================
 # Label Map 
@@ -81,17 +92,22 @@ code_to_info = {
 }
 
 # ==============================
-# Helper Function
+# Helper Function - Fixed for Streamlit Cloud
 # ==============================
-def predict_image(img_path):
+def predict_image(uploaded_file):
     try:
-        img = load_img(img_path, target_size=(299, 299))
-        img_array = img_to_array(img) / 255.0
+        # استخدام PIL لفتح الصورة مباشرة من uploaded file
+        image = Image.open(uploaded_file)
+        image = image.convert('RGB')  # تأكد أن الصورة RGB
+        
+        # تغيير الحجم
+        image = image.resize((299, 299))
+        img_array = np.array(image) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
 
         preds = model.predict(img_array, verbose=0)
         class_idx = np.argmax(preds)
-        confidence = np.max(preds)
+        confidence = float(np.max(preds))
 
         code = label_map.get(class_idx, "Unknown")
         
@@ -175,7 +191,7 @@ for idx, (name, (img, desc)) in enumerate(filtered_pharaohs.items()):
             st.info(desc)
 
 # ==============================
-# Translator Section
+# Translator Section - Fixed for Streamlit Cloud
 # ==============================
 st.markdown("---")
 st.subheader("📸 Hieroglyph Translator")
@@ -184,25 +200,30 @@ st.write("Upload a photo of a hieroglyph, and our AI model will predict its mean
 uploaded_file = st.file_uploader("Upload a hieroglyph image", type=["jpg", "jpeg", "png"], key="file_uploader")
 
 if uploaded_file is not None:
-    st.image(uploaded_file, caption="Uploaded Hieroglyph", use_container_width=True)
+    # عرض الصورة المرفوعة
+    col1, col2 = st.columns([1, 2])
     
-    # حفظ الصورة مؤقتاً
-    temp_path = "temp_hieroglyph.jpg"
-    with open(temp_path, "wb") as f:
-        f.write(uploaded_file.getbuffer())
-
-    # عرض مؤشر التحميل
-    with st.spinner("🔮 Analyzing hieroglyph..."):
-        code, name, desc, confidence = predict_image(temp_path)
+    with col1:
+        st.image(uploaded_file, caption="Uploaded Hieroglyph", use_container_width=True)
     
-    if code != "Error":
-        st.markdown(f"### 🔮 Prediction: **{name}** ({code})")
-        st.markdown(f"**Confidence:** {confidence:.2%}")
+    with col2:
+        # التحليل مباشرة من uploaded file بدون حفظ
+        with st.spinner("🔮 Analyzing hieroglyph..."):
+            code, name, desc, confidence = predict_image(uploaded_file)
         
-        if st.button("📖 Show Meaning", key="meaning_btn"):
-            st.info(desc)
-    else:
-        st.error(f"❌ {name}")
+        if code != "Error":
+            st.markdown(f"### 🔮 Prediction: **{name}** ({code})")
+            st.markdown(f"**Confidence:** {confidence:.2%}")
+            
+            if confidence > 0.1:  # إذا كانت الثقة معقولة
+                st.success("✅ Confident prediction!")
+            else:
+                st.warning("⚠️ Low confidence prediction")
+            
+            if st.button("📖 Show Meaning", key="meaning_btn"):
+                st.info(desc)
+        else:
+            st.error(f"❌ {name}")
 
 # ==============================
 # Museum Gallery
@@ -248,9 +269,14 @@ st.info("""
 - The system used **over 700 symbols** by the Late Period.
 """)
 
+# ==============================
+# Debug Info (يمكن إزالته لاحقاً)
+# ==============================
+with st.sidebar.expander("Debug Info"):
+    st.write("Model input shape:", model.input_shape)
+    st.write("Model output shape:", model.output_shape)
+    st.write("Number of classes:", len(label_map))
 
-if os.path.exists("temp_hieroglyph.jpg"):
-    os.remove("temp_hieroglyph.jpg")
 
 
 
