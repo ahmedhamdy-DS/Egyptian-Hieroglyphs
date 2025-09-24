@@ -8,4 +8,5 @@ keras
 matplotlib
 opencv-python-headless
 pillow
+gdown
 streamlit
