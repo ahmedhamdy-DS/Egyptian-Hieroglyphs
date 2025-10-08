@@ -5,68 +5,63 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import os
 import gdown
 
-# ==============================
-# Page Config
-# ==============================
-st.set_page_config(page_title="Egyptian Hieroglyphs", layout="wide")
+# ===============================================
+# 1. PAGE CONFIG & CSS STYLING
+# ===============================================
 
-# ==============================
-# Load Model
-# ==============================
-MODEL_DIR = "model"
-MODEL_FILE = "InceptionV3_model.h5"
-MODEL_PATH = os.path.join(MODEL_DIR, MODEL_FILE)
+st.set_page_config(page_title="Egyptian Hieroglyphs Portal", layout="wide")
 
-if not os.path.exists(MODEL_PATH):
-    os.makedirs(MODEL_DIR, exist_ok=True)
-    url = "https://huggingface.co/sonic222/Egyptian-Hieroglyphs/resolve/main/InceptionV3_model.h5"
-    gdown.download(url, MODEL_PATH, quiet=False)
+# Function to load and inject CSS
+def load_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-model = load_model(MODEL_PATH)
+# Load the custom CSS
+load_css("assets/css.css")
 
-# ==============================
-# Label Map 
-# ==============================
+# ===============================================
+# 2. MODEL LOADING (Your original code)
+# ===============================================
+
+# Use st.cache_resource to load the model only once
+@st.cache_resource
+def get_model():
+    MODEL_DIR = "model"
+    MODEL_FILE = "InceptionV3_model.h5"
+    MODEL_PATH = os.path.join(MODEL_DIR, MODEL_FILE)
+    
+    if not os.path.exists(MODEL_PATH):
+        with st.spinner("Downloading AI model for the first time..."):
+            os.makedirs(MODEL_DIR, exist_ok=True)
+            url = "https://huggingface.co/sonic222/Egyptian-Hieroglyphs/resolve/main/InceptionV3_model.h5"
+            gdown.download(url, MODEL_PATH, quiet=False)
+    
+    model = load_model(MODEL_PATH)
+    return model
+
+model = get_model()
+
+# ===============================================
+# 3. DATA DICTIONARIES (Your original code)
+# ===============================================
+
 label_map = {
     0: "N14", 1: "D2", 2: "L1", 3: "R1", 4: "F9",
     5: "S40", 6: "M9", 7: "G17", 8: "S42", 9: "R4"
 }
 
-# ==============================
-# Gardiner Categories
-# ==============================
 gardiner_categories = {
-    "A": "Man and his occupations",
-    "B": "Woman and her occupations",
-    "C": "Anthropomorphic deities",
-    "D": "Parts of the human body",
-    "E": "Mammals",
-    "F": "Parts of mammals",
-    "G": "Birds",
-    "H": "Parts of birds",
-    "I": "Amphibious animals, reptiles",
-    "K": "Fish and parts of fish",
-    "L": "Invertebrates and small plants",
-    "M": "Trees and plants",
-    "N": "Sky, earth, water",
-    "O": "Buildings, parts of buildings",
-    "P": "Domestic and funerary furniture",
-    "Q": "Vessels of stone and earthenware",
-    "R": "Temple furniture and sacred emblems",
-    "S": "Crowns, dress, staves, weapons",
-    "T": "Warfare, hunting, butchery",
-    "U": "Agriculture, crafts, professions",
-    "V": "Rope, fiber, baskets, bags",
-    "W": "Vessels of wood, stone, metal",
-    "X": "Loaves, cakes, offerings",
-    "Y": "Writing, games, music",
-    "Z": "Strokes, signs, geometrical figures",
+    "A": "Man and his occupations", "B": "Woman and her occupations", "C": "Anthropomorphic deities",
+    "D": "Parts of the human body", "E": "Mammals", "F": "Parts of mammals", "G": "Birds",
+    "H": "Parts of birds", "I": "Amphibious animals, reptiles", "K": "Fish and parts of fish",
+    "L": "Invertebrates and small plants", "M": "Trees and plants", "N": "Sky, earth, water",
+    "O": "Buildings, parts of buildings", "P": "Domestic and funerary furniture", "Q": "Vessels of stone and earthenware",
+    "R": "Temple furniture and sacred emblems", "S": "Crowns, dress, staves, weapons", "T": "Warfare, hunting, butchery",
+    "U": "Agriculture, crafts, professions", "V": "Rope, fiber, baskets, bags", "W": "Vessels of wood, stone, metal",
+    "X": "Loaves, cakes, offerings", "Y": "Writing, games, music", "Z": "Strokes, signs, geometrical figures",
     "Aa": "Unclassified signs"
 }
 
-# ==============================
-# Translation Dictionary (English)
-# ==============================
 code_to_info = {
     "N14": ("Ankh (☥)", "📖 Meaning: Symbol of eternal life, often simply translated as 'life'. Ancient Egyptians carried it in statues and inscriptions as a sign of immortality and spiritual power."),
     "D2": ("Eye of Horus (Udjat)", "📖 Meaning: Symbol of protection, health, and healing. Named after the myth where Horus lost his eye fighting Seth. Widely used as a powerful amulet."),
@@ -80,9 +75,10 @@ code_to_info = {
     "R4": ("Rosetta Stone", "📖 Meaning: The key to deciphering hieroglyphs. Inscribed in three scripts (Hieroglyphic, Demotic, and Greek). Enabled Champollion to unlock hieroglyphic writing in 1822.")
 }
 
-# ==============================
-# Helper Function
-# ==============================
+# ===============================================
+# 4. HELPER FUNCTION (Your original code)
+# ===============================================
+
 def predict_image(img_path):
     try:
         img = load_img(img_path, target_size=(299, 299))
@@ -92,7 +88,6 @@ def predict_image(img_path):
         preds = model.predict(img_array, verbose=0)
         class_idx = np.argmax(preds)
         confidence = np.max(preds)
-
         code = label_map.get(class_idx, "Unknown")
         
         if code in code_to_info:
@@ -101,66 +96,38 @@ def predict_image(img_path):
             prefix = ''.join([c for c in code if c.isalpha()])
             category = gardiner_categories.get(prefix, "Unknown Category")
             name, desc = code, f"Hieroglyph in category: {category}"
-
+        
         return code, name, desc, confidence
     
     except Exception as e:
         return "Error", f"Prediction Error: {str(e)}", "", 0.0
 
-# ==============================
-# Hero Section
-# ==============================
-st.image("https://i.pinimg.com/736x/69/d7/ab/69d7ab0e81142160f0d61d5e143fa90b.jpg",
-         caption="Ancient Egyptian Hieroglyphic Inscriptions", width=300)
+# ===============================================
+# 5. UI LAYOUT & SECTIONS
+# ===============================================
 
-st.title("🌍 Egyptian Hieroglyphs Portal")
+# Main container to center the content
+st.markdown('<div class="main-container">', unsafe_allow_html=True)
+
+# --- HERO SECTION ---
+st.title(" Egyptian Hieroglyphs Portal")
 st.markdown("""
 Welcome to the **Egyptian Hieroglyphs Portal** —  
 A digital gateway to explore the beauty, mystery, and science of the symbols that shaped Ancient Egypt.
 """)
+st.markdown('<hr class="section-divider">', unsafe_allow_html=True)
 
-# ==============================
-# Pharaohs Section
-# ==============================
-st.markdown("---")
+
+# --- PHARAOHS SECTION ---
+st.markdown('<div class="section">', unsafe_allow_html=True)
 st.subheader("👑 Famous Pharaohs of Ancient Egypt")
 
 pharaohs = {
-    "Tutankhamun": (
-        "https://i.pinimg.com/736x/c7/99/e6/c799e617f29aadf5f49b522968e60af6.jpg",
-        "👑 Tutankhamun (King Tut, 1332–1323 BC)\n\n"
-        "Tutankhamun became pharaoh at a very young age. "
-        "He is famous for his intact tomb discovered in 1922 by Howard Carter, "
-        "which revealed a treasure trove of Egyptian artifacts."
-    ),
-    "Ramses II": (
-        "https://i.pinimg.com/736x/d7/73/f4/d773f41104392ba33c8fbd6b20b674a2.jpg",
-        "👑 Ramses II (Ramses the Great, 1279–1213 BC)\n\n"
-        "One of Egypt's most powerful and celebrated pharaohs. "
-        "He led military campaigns, built many temples including Abu Simbel, "
-        "and reigned for 66 years."
-    ),
-    "Cleopatra VII": (
-        "https://i.pinimg.com/736x/dd/61/58/dd6158c88cb6ed637ffbe1a75bd408fe.jpg",
-        "👑 Cleopatra VII (69–30 BC)\n\n"
-        "The last active ruler of the Ptolemaic Kingdom. "
-        "Known for her intelligence, political skills, and relationships with Julius Caesar and Mark Antony. "
-        "She played a critical role in the final decades of Ancient Egypt."
-    ),
-    "Hatshepsut": (
-        "https://i.pinimg.com/736x/e4/bc/4c/e4bc4c0864fedade31261ddcd1de73e2.jpg",
-        "👑 Hatshepsut (1479–1458 BC)\n\n"
-        "One of the most successful female pharaohs. "
-        "She expanded trade networks, commissioned monumental building projects, "
-        "and ruled Egypt peacefully and effectively."
-    ),
-    "Khufu": (
-        "https://i.pinimg.com/736x/74/96/5d/74965d3d9b77c730df05ea241c841a54.jpg",
-        "👑 Khufu (Cheops, 2589–2566 BC)\n\n"
-        "Famous for commissioning the Great Pyramid of Giza, "
-        "one of the Seven Wonders of the Ancient World. "
-        "His reign was marked by major construction projects and centralized administration."
-    )
+    "Tutankhamun": ("https://i.pinimg.com/736x/c7/99/e6/c799e617f29aadf5f49b522968e60af6.jpg", "👑 Tutankhamun (King Tut, 1332–1323 BC)\n\nTutankhamun became pharaoh at a very young age. He is famous for his intact tomb discovered in 1922 by Howard Carter, which revealed a treasure trove of Egyptian artifacts."),
+    "Ramses II": ("https://i.pinimg.com/736x/d7/73/f4/d773f41104392ba33c8fbd6b20b674a2.jpg", "👑 Ramses II (Ramses the Great, 1279–1213 BC)\n\nOne of Egypt's most powerful and celebrated pharaohs. He led military campaigns, built many temples including Abu Simbel, and reigned for 66 years."),
+    "Cleopatra VII": ("https://i.pinimg.com/736x/dd/61/58/dd6158c88cb6ed637ffbe1a75bd408fe.jpg", "👑 Cleopatra VII (69–30 BC)\n\nThe last active ruler of the Ptolemaic Kingdom. Known for her intelligence, political skills, and relationships with Julius Caesar and Mark Antony. She played a critical role in the final decades of Ancient Egypt."),
+    "Hatshepsut": ("https://i.pinimg.com/736x/e4/bc/4c/e4bc4c0864fedade31261ddcd1de73e2.jpg", "👑 Hatshepsut (1479–1458 BC)\n\nOne of the most successful female pharaohs. She expanded trade networks, commissioned monumental building projects, and ruled Egypt peacefully and effectively."),
+    "Khufu": ("https://i.pinimg.com/736x/74/96/5d/74965d3d9b77c730df05ea241c841a54.jpg", "👑 Khufu (Cheops, 2589–2566 BC)\n\nFamous for commissioning the Great Pyramid of Giza, one of the Seven Wonders of the Ancient World. His reign was marked by major construction projects and centralized administration.")
 }
 
 search_pharaoh = st.text_input("🔍 Search for a Pharaoh (e.g., Tutankhamun, Ramses II):", key="pharaoh_search").strip().lower()
@@ -171,46 +138,41 @@ for idx, (name, (img, desc)) in enumerate(filtered_pharaohs.items()):
     with cols[idx % 3]:
         st.image(img, use_container_width=True)
         st.markdown(f"<h4 style='text-align:center'>{name}</h4>", unsafe_allow_html=True)
-        if st.button(f"📖 Show Info for {name}", key=f"pharaoh_{idx}"):
+        if st.button(f"📖 Show Info for {name}", key=f"pharaoh_{idx}", use_container_width=True):
             st.info(desc)
+st.markdown('</div>', unsafe_allow_html=True)
 
-# ==============================
-# Translator Section
-# ==============================
-st.markdown("---")
-st.subheader("📸 Hieroglyph Translator")
+# --- TRANSLATOR SECTION ---
+st.markdown('<hr class="section-divider">', unsafe_allow_html=True)
+st.markdown('<div class="section">', unsafe_allow_html=True)
+st.subheader("📸 AI Hieroglyph Translator")
 st.write("Upload a photo of a hieroglyph, and our AI model will predict its meaning.")
 
-uploaded_file = st.file_uploader("Upload a hieroglyph image", type=["jpg", "jpeg", "png"], key="file_uploader")
+uploaded_file = st.file_uploader("Upload a hieroglyph image", type=["jpg", "jpeg", "png"], key="file_uploader", label_visibility="collapsed")
 
 if uploaded_file is not None:
     st.image(uploaded_file, caption="Uploaded Hieroglyph", use_container_width=True)
-    
-    # حفظ الصورة مؤقتاً
     temp_path = "temp_hieroglyph.jpg"
     with open(temp_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
-
-    # عرض مؤشر التحميل
+    
     with st.spinner("🔮 Analyzing hieroglyph..."):
         code, name, desc, confidence = predict_image(temp_path)
     
     if code != "Error":
         st.markdown(f"### 🔮 Prediction: **{name}** ({code})")
+        st.progress(int(confidence * 100))
         st.markdown(f"**Confidence:** {confidence:.2%}")
-        
-        if st.button("📖 Show Meaning", key="meaning_btn"):
-            st.info(desc)
+        st.info(desc)
     else:
         st.error(f"❌ {name}")
+st.markdown('</div>', unsafe_allow_html=True)
 
-# ==============================
-# Museum Gallery
-# ==============================
-st.markdown("---")
+
+# --- MUSEUM GALLERY SECTION ---
+st.markdown('<hr class="section-divider">', unsafe_allow_html=True)
+st.markdown('<div class="section">', unsafe_allow_html=True)
 st.subheader("🏺 Explore the Hieroglyphic Museum")
-
-search_gallery = st.text_input("🔍 Search for a hieroglyph (e.g., Ankh, Ra, Scarab):", key="gallery_search").strip().lower()
 
 gallery = {
     "Ankh (☥)": ("https://i.pinimg.com/736x/9f/10/5e/9f105e86710d63371bd404b80d7cb5ae.jpg", code_to_info["N14"][1]),
@@ -218,13 +180,10 @@ gallery = {
     "Scarab": ("https://i.pinimg.com/736x/04/c5/94/04c5944110b8f438d71a158517424872.jpg", code_to_info["L1"][1]),
     "Ra (Sun God)": ("https://i.pinimg.com/736x/f8/e0/d8/f8e0d84d967b8cd6be58fe8efcf4ebbe.jpg", code_to_info["R1"][1]),
     "Djed (Pillar)": ("https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Amulette_en_forme_de_pilier_Djed_au_nom_de_Rams%C3%A8s_IX_%28Louvre%29.jpg/250px-Amulette_en_forme_de_pilier_Djed_au_nom_de_Rams%C3%A8s_IX_%28Louvre%29.jpg", code_to_info["F9"][1]),
-    "Was Scepter": ("https://i.pinimg.com/736x/e3/d9/b2/e3d9b28c687102861811965dfafa5dbb.jpg", code_to_info["S40"][1]),
-    "Lotus Flower": ("https://i.pinimg.com/1200x/dc/38/f6/dc38f6485aa43ae1d6a310b38f65cc83.jpg", code_to_info["M9"][1]),
-    "Feather of Ma'at": ("https://i.pinimg.com/1200x/e1/d9/2d/e1d92d368338f8ee3cadcaf0e63a93b0.jpg", code_to_info["G17"][1]),
-    "Crook & Flail": ("https://i.pinimg.com/736x/7c/79/74/7c7974f386ed02fdceea9dcb783e1f02.jpg", code_to_info["S42"][1]),
-    "Rosetta Stone": ("https://i.pinimg.com/736x/31/b6/a6/31b6a6d00c595a086a7430065fa7f370.jpg", code_to_info["R4"][1])
+    "Was Scepter": ("https://i.pinimg.com/736x/e3/d9/b2/e3d9b28c687102861811965dfafa5dbb.jpg", code_to_info["S40"][1])
 }
 
+search_gallery = st.text_input("🔍 Search for a hieroglyph (e.g., Ankh, Ra, Scarab):", key="gallery_search").strip().lower()
 filtered_gallery = {k: v for k, v in gallery.items() if search_gallery in k.lower()} if search_gallery else gallery
 
 cols = st.columns(3)
@@ -232,23 +191,26 @@ for idx, (name, (path, desc)) in enumerate(filtered_gallery.items()):
     with cols[idx % 3]:
         st.image(path, use_container_width=True)
         st.markdown(f"<h4 style='text-align:center'>{name}</h4>", unsafe_allow_html=True)
-
-        if st.button(f"📖 Show Meaning for {name}", key=f"gallery_{idx}"):
+        if st.button(f"📖 Show Meaning for {name}", key=f"gallery_{idx}", use_container_width=True):
             st.info(desc)
+st.markdown('</div>', unsafe_allow_html=True)
 
-# ==============================
-# Trivia Section
-# ==============================
-st.markdown("---")
+# --- TRIVIA SECTION ---
+st.markdown('<hr class="section-divider">', unsafe_allow_html=True)
+st.markdown('<div class="section">', unsafe_allow_html=True)
 st.subheader("📖 Did You Know?")
 st.info("""
-- The **Rosetta Stone** was the key to deciphering hieroglyphs.  
-- Only about **1% of Ancient Egyptians** could read and write.  
-- Hieroglyphs were called **"mdw nṯr"**, meaning *words of the gods*.  
+- The **Rosetta Stone** was the key to deciphering hieroglyphs.
+- Only about **1% of Ancient Egyptians** could read and write.
+- Hieroglyphs were called **"mdw nṯr"**, meaning *words of the gods*.
 - The system used **over 700 symbols** by the Late Period.
 """)
+st.markdown('</div>', unsafe_allow_html=True)
 
+# Close the main container
+st.markdown('</div>', unsafe_allow_html=True)
 
+# --- CLEANUP (Your original code) ---
 if os.path.exists("temp_hieroglyph.jpg"):
     os.remove("temp_hieroglyph.jpg")
 
