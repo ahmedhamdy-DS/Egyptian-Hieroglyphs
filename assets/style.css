@@ -25,7 +25,7 @@ body {
     background-image: url('https://i.pinimg.com/1200x/30/2c/94/302c94099d80a2f026e3f10c63891637.jpg');
     
     /* Set the image to cover 50% of the width and 100% of the height */
-    background-size: 50% 100%; 
+    background-size: 50% 50%; 
     
     /* Position the image on the left side */
     background-position: center;
