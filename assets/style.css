@@ -1,0 +1,198 @@
+/* --- Google Font Import --- */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Poppins:wght@300;400;600&display=swap');
+
+/* --- Theme Variables --- */
+:root {
+    --primary-font: 'Cinzel Decorative', cursive;
+    --secondary-font: 'Poppins', sans-serif;
+    --glow-gold: #FFD700;
+    --dark-bg: #0c0c0c;
+    --card-bg: rgba(20, 20, 20, 0.8);
+    --text-color: #EAE0D5;
+    --border-color: rgba(255, 215, 0, 0.3);
+}
+
+/* --- General Styles & Streamlit Overrides --- */
+body {
+    font-family: var(--secondary-font);
+    color: var(--text-color);
+}
+
+.stApp {
+    /* Set a solid background color for the 50% area the image won't cover */
+    background-color: var(--dark-bg); 
+
+
+    
+    /* Set the image to cover 50% of the width and 100% of the height */
+    background-size: 50% 100%; 
+    
+    /* Position the image on the left side */
+    background-position: center;
+
+    /* Prevent the image from repeating */
+    background-repeat: no-repeat;
+
+    /* Keep the parallax scroll effect */
+    background-attachment:  fixed; 
+}
+
+#MainMenu, .stDeployButton, footer {
+    display: none !important;
+}
+
+.block-container {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+    padding: 2rem;
+}
+
+.hero-text .title {
+    font-family: var(--primary-font);
+    font-size: 5rem;
+    font-weight: 700;
+    color: var(--glow-gold);
+    text-shadow: 0 0 15px var(--glow-gold), 0 0 25px var(--glow-gold), 0 0 5px #000;
+    margin: 0;
+}
+
+.hero-text .subtitle {
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin: 1rem 0 2rem 0;
+}
+
+/* --- General Section Styling --- */
+.section-container {
+    padding: 5rem 2rem;
+    margin: 0 auto;
+    max-width: 1200px;
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.section-header {
+    font-family: var(--primary-font);
+    font-size: 3rem;
+    color: var(--glow-gold);
+    text-align: center;
+    margin-bottom: 3rem;
+    text-shadow: 0 0 10px var(--glow-gold);
+}
+
+/* --- AI Name Generator Section --- */
+.cartouche-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 2rem;
+    border: 2px solid var(--glow-gold);
+    border-radius: 50px; /* Creates the cartouche oval shape */
+    background-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 20px var(--glow-gold);
+    margin: 2rem auto;
+    max-width: 800px;
+}
+.cartouche-container img {
+    height: 60px;
+    filter: invert(90%) sepia(50%) saturate(500%) hue-rotate(350deg);
+}
+
+/* --- Timeline of Dynasties --- */
+.timeline {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.timeline::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: var(--glow-gold);
+    box-shadow: 0 0 10px var(--glow-gold);
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -2px;
+}
+.timeline-item {
+    padding: 10px 40px;
+    position: relative;
+    width: 50%;
+}
+.timeline-item.left { left: 0; }
+.timeline-item.right { left: 50%; }
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: -12px;
+    background-color: var(--dark-bg);
+    border: 4px solid var(--glow-gold);
+    top: 25px;
+    border-radius: 50%;
+    z-index: 1;
+}
+.timeline-item.right::after { left: -8px; }
+.timeline-content {
+    padding: 20px 30px;
+    background: rgba(0,0,0,0.3);
+    position: relative;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+.timeline-content h3 { color: var(--glow-gold); font-family: 'Poppins', sans-serif; font-weight: 600; }
+.timeline-content p { font-size: 0.9rem; }
+
+/* --- Quiz Section --- */
+.quiz-container img {
+    max-width: 150px;
+    margin: 1rem auto;
+    display: block;
+}
+.stRadio > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+.stButton > button {
+    font-family: var(--primary-font);
+    border-radius: 8px;
+    border: 2px solid var(--glow-gold);
+    background-color: transparent;
+    color: var(--glow-gold);
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+.stButton > button:hover {
+    background-color: var(--glow-gold);
+    color: var(--dark-bg);
+    box-shadow: 0 0 15px var(--glow-gold);
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .hero-text .title { font-size: 2.5rem; }
+    .section-header { font-size: 2rem; }
+    .timeline::after { left: 20px; }
+    .timeline-item { width: 100%; padding-left: 60px; padding-right: 15px; }
+    .timeline-item.left, .timeline-item.right { left: 0%; }
+    .timeline-item.left::after, .timeline-item.right::after { left: 10px; }
+}
