@@ -22,7 +22,7 @@ body {
     /* Set a solid background color for the 50% area the image won't cover */
     background-color: var(--dark-bg); 
 
-
+    background-image: url('https://i.pinimg.com/1200x/30/2c/94/302c94099d80a2f026e3f10c63891637.jpg');
     
     /* Set the image to cover 50% of the width and 100% of the height */
     background-size: 50% 100%; 
