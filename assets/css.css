@@ -1,0 +1,121 @@
+/* assets/css.css */
+
+/* --- Google Font Import --- */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap');
+
+/* --- Theme Variables --- */
+:root {
+    --primary-gold: #FFD700;
+    --dark-bg: #121212;
+    --card-bg: #1E1E1E;
+    --text-color: #E0E0E0;
+    --text-muted: #A0A0A0;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+/* --- Global Styles --- */
+body {
+    font-family: 'Lato', sans-serif;
+    color: var(--text-color);
+    background-color: var(--dark-bg);
+}
+
+/* --- Custom Typography --- */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel', serif;
+    color: var(--primary-gold);
+    font-weight: 700;
+}
+
+p, .st-emotion-cache-16idsys p {
+    color: var(--text-muted);
+}
+
+/* --- Hide Streamlit Header/Footer --- */
+.stApp > header {
+    visibility: hidden;
+}
+footer {
+    visibility: hidden;
+}
+
+/* --- Layout Containers --- */
+.main-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem;
+}
+
+.section {
+    background-color: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 15px;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 10px 30px var(--shadow-color);
+    border: 1px solid #333;
+}
+
+/* --- Custom Components & Effects --- */
+.section-divider {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), var(--primary-gold), rgba(0, 0, 0, 0));
+    margin: 4rem 0;
+}
+
+img {
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+}
+
+/* --- Streamlit Widget Styling --- */
+
+/* Text Input */
+div[data-testid="stTextInput"] input {
+    background-color: var(--dark-bg);
+    border-radius: 8px;
+    border: 1px solid #444;
+    color: var(--text-color);
+}
+div[data-testid="stTextInput"] input:focus {
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+/* Button */
+.stButton > button {
+    border-radius: 8px;
+    border: 1px solid var(--primary-gold);
+    background-color: transparent;
+    color: var(--primary-gold);
+    transition: all 0.3s ease;
+}
+.stButton > button:hover {
+    background-color: var(--primary-gold);
+    color: var(--dark-bg);
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+}
+
+/* File Uploader */
+div[data-testid="stFileUploader"] {
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 1rem;
+}
+div[data-testid="stFileUploader"] section {
+    border: 2px dashed var(--primary-gold);
+    background-color: var(--card-bg);
+}
+
+/* Info Box */
+div[data-testid="stInfo"] {
+    background-color: rgba(255, 215, 0, 0.1);
+    border-left: 5px solid var(--primary-gold);
+    border-radius: 8px;
+}
