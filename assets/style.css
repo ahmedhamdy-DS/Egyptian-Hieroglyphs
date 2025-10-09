@@ -1,198 +1,341 @@
-/* --- Google Font Import --- */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Poppins:wght@300;400;600&display=swap');
+/* --- GOOGLE FONTS & GLOBAL STYLES --- */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
 
-/* --- Theme Variables --- */
 :root {
-    --primary-font: 'Cinzel Decorative', cursive;
-    --secondary-font: 'Poppins', sans-serif;
-    --glow-gold: #FFD700;
-    --dark-bg: #0c0c0c;
-    --card-bg: rgba(20, 20, 20, 0.8);
-    --text-color: #EAE0D5;
-    --border-color: rgba(255, 215, 0, 0.3);
+    --primary-font: 'Poppins', sans-serif;
+    --title-font: 'Cinzel', serif;
+    --hero-font: 'Cinzel Decorative', cursive;
+    --dark-bg: #121212;
+    --dark-card: #1E1E1E;
+    --gold-accent: #D4AF37;
+    --light-text: #E0E0E0;
+    --medium-text: #A0A0A0;
+    --border-color: rgba(212, 175, 55, 0.2);
 }
 
-/* --- General Styles & Streamlit Overrides --- */
 body {
-    font-family: var(--secondary-font);
-    color: var(--text-color);
+    background-color: var(--dark-bg);
+    color: var(--light-text);
+    font-family: var(--primary-font);
+    line-height: 1.8;
 }
 
-.stApp {
-    /* Set a solid background color for the 50% area the image won't cover */
-    background-color: var(--dark-bg); 
-
-    background-image: url('https://i.pinimg.com/1200x/30/2c/94/302c94099d80a2f026e3f10c63891637.jpg');
-    
-    /* Set the image to cover 50% of the width and 100% of the height */
-    background-size: 50% 50%; 
-    
-    /* Position the image on the left side */
-    background-position: center;
-
-    /* Prevent the image from repeating */
-    background-repeat: no-repeat;
-
-    /* Keep the parallax scroll effect */
-    background-attachment:  fixed; 
-}
-
-#MainMenu, .stDeployButton, footer {
+/* Hide Streamlit's default header, footer, and hamburger menu */
+#MainMenu, header, footer {
     display: none !important;
 }
 
-.block-container {
-    padding: 0 !important;
-    margin: 0 !important;
+/* Main app container styling */
+.main .block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
-/* --- Hero Section --- */
-.hero-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
-    padding: 2rem;
+h1, h2, h3 {
+    font-family: var(--title-font);
+    color: var(--gold-accent);
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
 }
 
-.hero-text .title {
-    font-family: var(--primary-font);
-    font-size: 5rem;
-    font-weight: 700;
-    color: var(--glow-gold);
-    text-shadow: 0 0 15px var(--glow-gold), 0 0 25px var(--glow-gold), 0 0 5px #000;
-    margin: 0;
-}
-
-.hero-text .subtitle {
-    font-size: 1.5rem;
-    font-weight: 300;
-    margin: 1rem 0 2rem 0;
-}
-
-/* --- General Section Styling --- */
-.section-container {
-    padding: 5rem 2rem;
-    margin: 0 auto;
-    max-width: 1200px;
-    background-color: var(--card-bg);
+.section-divider {
     border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    margin: 4rem auto;
 }
 
-.section-header {
-    font-family: var(--primary-font);
-    font-size: 3rem;
-    color: var(--glow-gold);
+.section-title {
     text-align: center;
-    margin-bottom: 3rem;
-    text-shadow: 0 0 10px var(--glow-gold);
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
 }
 
-/* --- AI Name Generator Section --- */
-.cartouche-container {
+/* --- HERO SECTION --- */
+@keyframes float-hieroglyphs {
+    0% { background-position: 0 0; }
+    100% { background-position: 1000px 2000px; }
+}
+
+.hero-section {
+    position: relative;
+    height: 90vh;
     display: flex;
-    justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
+    justify-content: center;
+    text-align: center;
     padding: 2rem;
-    border: 2px solid var(--glow-gold);
-    border-radius: 50px; /* Creates the cartouche oval shape */
-    background-color: rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 20px var(--glow-gold);
-    margin: 2rem auto;
-    max-width: 800px;
-}
-.cartouche-container img {
-    height: 60px;
-    filter: invert(90%) sepia(50%) saturate(500%) hue-rotate(350deg);
+    color: white;
+    overflow: hidden;
 }
 
-/* --- Timeline of Dynasties --- */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://i.pinimg.com/1200x/30/2c/94/302c94099d80a2f026e3f10c63891637.jpg');
+    background-size: 400px;
+    opacity: 0.05;
+    animation: float-hieroglyphs 120s linear infinite;
+    z-index: 1;
+}
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 20%, var(--dark-bg) 70%);
+    z-index: 2;
+}
+
+
+.hero-text {
+    position: relative;
+    z-index: 3;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.cinzel-decorative-bold {
+    font-family: var(--hero-font);
+    font-size: 4rem;
+    color: white;
+    text-shadow: 0 0 15px var(--gold-accent);
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-top: -10px;
+    color: var(--light-text);
+}
+
+.cta-button {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 12px 30px;
+    background-color: transparent;
+    border: 2px solid var(--gold-accent);
+    color: var(--gold-accent);
+    text-decoration: none;
+    font-family: var(--title-font);
+    font-weight: 700;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: var(--gold-accent);
+    color: var(--dark-bg);
+    box-shadow: 0 0 20px var(--gold-accent);
+}
+
+/* --- EDUCATIONAL & KEYWORD SECTION --- */
+.section-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--dark-card);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.keyword {
+    color: var(--gold-accent);
+    font-weight: 600;
+    cursor: help;
+    border-bottom: 1px dotted var(--gold-accent);
+    transition: all 0.2s ease;
+}
+
+.keyword:hover {
+    background-color: rgba(212, 175, 55, 0.1);
+    border-bottom-style: solid;
+}
+
+/* --- TIMELINE SECTION --- */
 .timeline {
     position: relative;
     max-width: 1000px;
     margin: 0 auto;
+    padding: 2rem 0;
 }
+
 .timeline::after {
     content: '';
     position: absolute;
     width: 4px;
-    background-color: var(--glow-gold);
-    box-shadow: 0 0 10px var(--glow-gold);
+    background-color: var(--gold-accent);
     top: 0;
     bottom: 0;
     left: 50%;
     margin-left: -2px;
+    border-radius: 2px;
+    box-shadow: 0 0 10px var(--gold-accent);
 }
+
 .timeline-item {
     padding: 10px 40px;
     position: relative;
     width: 50%;
 }
-.timeline-item.left { left: 0; }
-.timeline-item.right { left: 50%; }
+
+.timeline-item.left {
+    left: 0;
+    text-align: right;
+}
+
+.timeline-item.right {
+    left: 50%;
+    text-align: left;
+}
+
 .timeline-item::after {
     content: '';
     position: absolute;
     width: 20px;
     height: 20px;
-    right: -12px;
     background-color: var(--dark-bg);
-    border: 4px solid var(--glow-gold);
+    border: 4px solid var(--gold-accent);
     top: 25px;
     border-radius: 50%;
     z-index: 1;
 }
-.timeline-item.right::after { left: -8px; }
+
+.timeline-item.left::after {
+    right: -12px;
+}
+
+.timeline-item.right::after {
+    left: -12px;
+}
+
 .timeline-content {
     padding: 20px 30px;
-    background: rgba(0,0,0,0.3);
+    background-color: var(--dark-card);
+    border: 1px solid var(--border-color);
     position: relative;
+    border-radius: 6px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.timeline-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2);
+}
+
+@media screen and (max-width: 768px) {
+    .timeline::after { left: 20px; }
+    .timeline-item { width: 100%; padding-left: 50px; padding-right: 10px; }
+    .timeline-item.left, .timeline-item.right { left: 0; text-align: left; }
+    .timeline-item.left::after, .timeline-item.right::after { left: 8px; }
+}
+
+/* --- QUIZ SECTION --- */
+.quiz-card {
+    background-image: url('https://www.transparenttextures.com/patterns/papyrus.png');
+    background-color: #f5eeda; /* Papyrus color */
+    color: #4a3f35;
+    padding: 2rem;
+    border-radius: 5px;
+    border: 2px solid #c8b88a;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    margin-bottom: 1rem;
+}
+.question-text {
+    font-family: var(--title-font);
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+.score-scroll {
+    text-align: center;
+    padding: 2rem;
+    margin: 1rem auto;
+    max-width: 500px;
+    background-image: url('https://www.transparenttextures.com/patterns/papyrus.png');
+    background-color: #f5eeda;
+    color: #4a3f35;
+    border: 5px solid #a18f5c;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #a18f5c inset, 0 5px 15px rgba(0,0,0,0.5);
+}
+.final-score {
+    font-size: 2rem;
+    font-family: var(--hero-font);
+    color: #8b4513;
+}
+
+/* --- DID YOU KNOW SECTION --- */
+.fact-card {
+    background-color: var(--dark-card);
+    padding: 1.5rem;
     border-radius: 8px;
     border: 1px solid var(--border-color);
-}
-.timeline-content h3 { color: var(--glow-gold); font-family: 'Poppins', sans-serif; font-weight: 600; }
-.timeline-content p { font-size: 0.9rem; }
-
-/* --- Quiz Section --- */
-.quiz-container img {
-    max-width: 150px;
-    margin: 1rem auto;
-    display: block;
-}
-.stRadio > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-.stButton > button {
-    font-family: var(--primary-font);
-    border-radius: 8px;
-    border: 2px solid var(--glow-gold);
-    background-color: transparent;
-    color: var(--glow-gold);
-    padding: 10px 20px;
+    text-align: center;
+    height: 100%;
     transition: all 0.3s ease;
 }
-.stButton > button:hover {
-    background-color: var(--glow-gold);
-    color: var(--dark-bg);
-    box-shadow: 0 0 15px var(--glow-gold);
+.fact-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+    border-color: var(--gold-accent);
+}
+.fact-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
 }
 
-/* --- Responsive Design --- */
-@media (max-width: 768px) {
-    .hero-text .title { font-size: 2.5rem; }
-    .section-header { font-size: 2rem; }
-    .timeline::after { left: 20px; }
-    .timeline-item { width: 100%; padding-left: 60px; padding-right: 15px; }
-    .timeline-item.left, .timeline-item.right { left: 0%; }
-    .timeline-item.left::after, .timeline-item.right::after { left: 10px; }
+/* --- CARTOUCHE GENERATOR --- */
+.cartouche-container {
+    background-color: var(--dark-card);
+    border: 3px solid var(--gold-accent);
+    border-radius: 40px; /* pill shape */
+    padding: 20px;
+    margin: 2rem auto;
+    max-width: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+}
+.cartouche-placeholder {
+    text-align:center;
+    color: var(--medium-text);
+}
+.cartouche-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+.glyph-wrapper {
+    transition: transform 0.2s ease;
+}
+.glyph-wrapper:hover {
+    transform: scale(1.1);
+}
+.glyph-image {
+    height: 50px;
+    filter: brightness(0) saturate(100%) invert(80%) sepia(29%) saturate(848%) hue-rotate(359deg) brightness(93%) contrast(87%);
+}
+
+/* --- FOOTER --- */
+.footer {
+    text-align: center;
+    color: var(--medium-text);
+    padding: 2rem 0 1rem 0;
+    font-size: 0.9rem;
+}
+.footer .quote {
+    font-style: italic;
+    color: var(--light-text);
+}
+
+/* --- UTILITY & ANIMATIONS --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
