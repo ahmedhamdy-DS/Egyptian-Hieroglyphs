@@ -7,7 +7,7 @@ st.set_page_config(
     page_title="Ancient Egypt AI Explorer",
     page_icon="🏺",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # --- DATA ---
@@ -263,6 +263,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
