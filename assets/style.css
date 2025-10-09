@@ -21,7 +21,7 @@ body {
 }
 
 /* Hide Streamlit's default header, footer, and hamburger menu */
-#MainMenu, header, footer {
+#MainMenu, footer {
     display: none !important;
 }
 
