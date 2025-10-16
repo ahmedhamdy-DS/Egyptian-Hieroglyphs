@@ -509,12 +509,13 @@ st.markdown('<hr class="section-divider">', unsafe_allow_html=True)
 st.markdown('<div class="section">', unsafe_allow_html=True)
 st.subheader("👑 Famous Pharaohs of Ancient Egypt")
 
+
 pharaohs = {
-    "Tutankhamun": ("https://i.pinimg.com/736x/c7/99/e6/c799e617f29aadf5f49b522968e60af6.jpg", "👑 Tutankhamun (King Tut, 1332–1323 BC)\n\nTutankhamun became pharaoh at a very young age. He is famous for his intact tomb discovered in 1922 by Howard Carter, which revealed a treasure trove of Egyptian artifacts."),
-    "Ramses II": ("https://i.pinimg.com/736x/d7/73/f4/d773f41104392ba33c8fbd6b20b674a2.jpg", "👑 Ramses II (Ramses the Great, 1279–1213 BC)\n\nOne of Egypt's most powerful and celebrated pharaohs. He led military campaigns, built many temples including Abu Simbel, and reigned for 66 years."),
-    "Cleopatra VII": ("https://i.pinimg.com/736x/dd/61/58/dd6158c88cb6ed637ffbe1a75bd408fe.jpg", "👑 Cleopatra VII (69–30 BC)\n\nThe last active ruler of the Ptolemaic Kingdom. Known for her intelligence, political skills, and relationships with Julius Caesar and Mark Antony. She played a critical role in the final decades of Ancient Egypt."),
-    "Hatshepsut": ("https://i.pinimg.com/736x/e4/bc/4c/e4bc4c0864fedade31261ddcd1de73e2.jpg", "👑 Hatshepsut (1479–1458 BC)\n\nOne of the most successful female pharaohs. She expanded trade networks, commissioned monumental building projects, and ruled Egypt peacefully and effectively."),
-    "Khufu": ("https://i.pinimg.com/736x/74/96/5d/74965d3d9b77c730df05ea241c841a54.jpg", "👑 Khufu (Cheops, 2589–2566 BC)\n\nFamous for commissioning the Great Pyramid of Giza, one of the Seven Wonders of the Ancient World. His reign was marked by major construction projects and centralized administration.")
+    "Tutankhamun": ("assets\c799e617f29aadf5f49b522968e60af6.jpg", "👑 Tutankhamun (King Tut, 1332–1323 BC)\n\nTutankhamun became pharaoh at a very young age. He is famous for his intact tomb discovered in 1922 by Howard Carter, which revealed a treasure trove of Egyptian artifacts."),
+    "Ramses II": ("assets\d773f41104392ba33c8fbd6b20b674a2.jpg", "👑 Ramses II (Ramses the Great, 1279–1213 BC)\n\nOne of Egypt's most powerful and celebrated pharaohs. He led military campaigns, built many temples including Abu Simbel, and reigned for 66 years."),
+    "Cleopatra VII": ("D:\python for data science\hieroglyph\assets\dd6158c88cb6ed637ffbe1a75bd408fe.jpg", "👑 Cleopatra VII (69–30 BC)\n\nThe last active ruler of the Ptolemaic Kingdom. Known for her intelligence, political skills, and relationships with Julius Caesar and Mark Antony. She played a critical role in the final decades of Ancient Egypt."),
+    "Hatshepsut": ("assets\944d5d3f2aa155d76159ba6cb6a856ee.jpg", "👑 Hatshepsut (1479–1458 BC)\n\nOne of the most successful female pharaohs. She expanded trade networks, commissioned monumental building projects, and ruled Egypt peacefully and effectively."),
+    "Khufu": ("assets\74965d3d9b77c730df05ea241c841a54.jpg", "👑 Khufu (Cheops, 2589–2566 BC)\n\nFamous for commissioning the Great Pyramid of Giza, one of the Seven Wonders of the Ancient World. His reign was marked by major construction projects and centralized administration.")
 }
 
 search_pharaoh = st.text_input("🔍 Search for a Pharaoh (e.g., Tutankhamun, Ramses II):", key="pharaoh_search").strip().lower()
