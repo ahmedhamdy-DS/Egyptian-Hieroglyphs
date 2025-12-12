@@ -536,25 +536,28 @@ for idx, (name, (img, desc)) in enumerate(filtered_pharaohs.items()):
             st.warning(f"الصورة غير متاحة: {name}")
             
 
+# --- قسم الفراعنة (Pharaohs Section) ---
 import os 
+
+# تأكد إن المتغير filtered_pharaohs متعرف قبله
 
 cols = st.columns(3)
 for idx, (name, (img, desc)) in enumerate(filtered_pharaohs.items()):
     with cols[idx % 3]:
+        # 1. عرض الصورة
+        # نتأكد إن المسار مش فاضي وإن الملف موجود فعلاً
         if img and os.path.exists(img):
             st.image(img, use_container_width=True)
         else:
-            
+            # لو الصورة مش موجودة، نعرض تحذير أو صورة بديلة
             st.warning(f"الصورة غير متاحة: {name}")
-        
-       
+            # لو عندك صورة placeholder ممكن تفعل السطر ده:
+            # st.image("assets/placeholder.jpg", use_container_width=True) 
 
+        # 2. عرض الاسم
         st.markdown(f"<h4 style='text-align:center'>{name}</h4>", unsafe_allow_html=True)
-        if st.button(f"📖 Show Info for {name}", key=f"pharaoh_{idx}", use_container_width=True):
-            st.info(desc)       
-            st.image("assets/placeholder.jpg", use_container_width=True) 
 
-        st.markdown(f"<h4 style='text-align:center'>{name}</h4>", unsafe_allow_html=True)
+        # 3. عرض الزرار والمعلومات (مرة واحدة فقط)
         if st.button(f"📖 Show Info for {name}", key=f"pharaoh_{idx}", use_container_width=True):
             st.info(desc)
 
