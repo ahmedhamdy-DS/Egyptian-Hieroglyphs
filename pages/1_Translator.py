@@ -522,7 +522,7 @@ search_pharaoh = st.text_input("🔍 Search for a Pharaoh (e.g., Tutankhamun, Ra
 filtered_pharaohs = {k: v for k, v in pharaohs.items() if search_pharaoh in k.lower()} if search_pharaoh else pharaohs
 
 cols = st.columns(3)
--
+
 import os
 
 cols = st.columns(3)
