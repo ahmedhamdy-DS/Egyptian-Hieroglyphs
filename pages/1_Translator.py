@@ -522,17 +522,40 @@ search_pharaoh = st.text_input("🔍 Search for a Pharaoh (e.g., Tutankhamun, Ra
 filtered_pharaohs = {k: v for k, v in pharaohs.items() if search_pharaoh in k.lower()} if search_pharaoh else pharaohs
 
 cols = st.columns(3)
+-
+import os
+
+cols = st.columns(3)
 for idx, (name, (img, desc)) in enumerate(filtered_pharaohs.items()):
     with cols[idx % 3]:
-        if img is not None:
+
+        if img and os.path.exists(img):
             st.image(img, use_container_width=True)
         else:
-            st.warning("لم يتم تحميل الصورة بنجاح أو لا توجد صورة لعرضها.")
-        st.image(img, use_container_width=True)
+           
+            st.warning(f"الصورة غير متاحة: {name}")
+            
+
+import os 
+
+cols = st.columns(3)
+for idx, (name, (img, desc)) in enumerate(filtered_pharaohs.items()):
+    with cols[idx % 3]:
+        if img and os.path.exists(img):
+            st.image(img, use_container_width=True)
+        else:
+            
+            st.warning(f"الصورة غير متاحة: {name}")
+        
+       
+
+        st.markdown(f"<h4 style='text-align:center'>{name}</h4>", unsafe_allow_html=True)
+        if st.button(f"📖 Show Info for {name}", key=f"pharaoh_{idx}", use_container_width=True):
+            st.info(desc)        st.image("assets/placeholder.jpg", use_container_width=True) 
+
         st.markdown(f"<h4 style='text-align:center'>{name}</h4>", unsafe_allow_html=True)
         if st.button(f"📖 Show Info for {name}", key=f"pharaoh_{idx}", use_container_width=True):
             st.info(desc)
-st.markdown('</div>', unsafe_allow_html=True)
 
 # --- TRANSLATOR SECTION ---
 st.markdown('<hr class="section-divider">', unsafe_allow_html=True)
