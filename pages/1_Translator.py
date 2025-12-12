@@ -551,7 +551,8 @@ for idx, (name, (img, desc)) in enumerate(filtered_pharaohs.items()):
 
         st.markdown(f"<h4 style='text-align:center'>{name}</h4>", unsafe_allow_html=True)
         if st.button(f"📖 Show Info for {name}", key=f"pharaoh_{idx}", use_container_width=True):
-            st.info(desc)        st.image("assets/placeholder.jpg", use_container_width=True) 
+            st.info(desc)       
+            st.image("assets/placeholder.jpg", use_container_width=True) 
 
         st.markdown(f"<h4 style='text-align:center'>{name}</h4>", unsafe_allow_html=True)
         if st.button(f"📖 Show Info for {name}", key=f"pharaoh_{idx}", use_container_width=True):
