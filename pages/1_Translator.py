@@ -607,12 +607,12 @@ st.markdown('<div class="section">', unsafe_allow_html=True)
 st.subheader("🏺 Explore the Hieroglyphic Museum")
 
 gallery = {
-    "Ankh (☥)": ("https://i.pinimg.com/736x/9f/10/5e/9f105e86710d63371bd404b80d7cb5ae.jpg", code_to_info["N14"][1]),
-    "Eye of Horus (Udjat)": ("https://i.pinimg.com/1200x/2d/bc/75/2dbc75da05593bdad03af9b27ebc42d8.jpg", code_to_info["D2"][1]),
-    "Scarab": ("https://i.pinimg.com/736x/04/c5/94/04c5944110b8f438d71a158517424872.jpg", code_to_info["L1"][1]),
-    "Ra (Sun God)": ("https://i.pinimg.com/736x/f8/e0/d8/f8e0d84d967b8cd6be58fe8efcf4ebbe.jpg", code_to_info["R1"][1]),
-    "Djed (Pillar)": ("https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Amulette_en_forme_de_pilier_Djed_au_nom_de_Rams%C3%A8s_IX_%28Louvre%29.jpg/250px-Amulette_en_forme_de_pilier_Djed_au_nom_de_Rams%C3%A8s_IX_%28Louvre%29.jpg", code_to_info["F9"][1]),
-    "Was Scepter": ("https://i.pinimg.com/736x/e3/d9/b2/e3d9b28c687102861811965dfafa5dbb.jpg", code_to_info["S40"][1])
+    "Ankh (☥)": ("assets/Ankh.jpg", code_to_info["N14"][1]),
+    "Eye of Horus (Udjat)": ("assets/Eye of Horus", code_to_info["D2"][1]),
+    "Scarab": ("assets/scarab.jpg", code_to_info["L1"][1]),
+    "Ra (Sun God)": ("assets/Ra.jpg", code_to_info["R1"][1]),
+    "Djed (Pillar)": ("assets/djed.jpg", code_to_info["F9"][1]),
+    "Was Scepter": ("assets/was.jpg", code_to_info["S40"][1])
 }
 
 search_gallery = st.text_input("🔍 Search for a hieroglyph (e.g., Ankh, Ra, Scarab):", key="gallery_search").strip().lower()
