@@ -610,23 +610,52 @@ st.subheader("🏺 Explore the Hieroglyphic Museum")
 
 gallery = {
     "Ankh (☥)": ("assets/Ankh.jpg", code_to_info["N14"][1]),
-    "Eye of Horus (Udjat)": ("assets/Eye of Horus", code_to_info["D2"][1]),
+    "Eye of Horus (Udjat)": ("assets/Eye_of_Horus.jpg", code_to_info["D2"][1]),
     "Scarab": ("assets/scarab.jpg", code_to_info["L1"][1]),
     "Ra (Sun God)": ("assets/Ra.jpg", code_to_info["R1"][1]),
     "Djed (Pillar)": ("assets/djed.jpg", code_to_info["F9"][1]),
     "Was Scepter": ("assets/was.jpg", code_to_info["S40"][1])
 }
 
-search_gallery = st.text_input("🔍 Search for a hieroglyph (e.g., Ankh, Ra, Scarab):", key="gallery_search").strip().lower()
-filtered_gallery = {k: v for k, v in gallery.items() if search_gallery in k.lower()} if search_gallery else gallery
+search_gallery = st.text_input(
+    "🔍 Search for a hieroglyph (e.g., Ankh, Ra, Scarab):",
+    key="gallery_search"
+).strip().lower()
+
+filtered_gallery = {
+    k: v for k, v in gallery.items()
+    if search_gallery in k.lower()
+} if search_gallery else gallery
+
+import os
+from PIL import Image
 
 cols = st.columns(3)
+
 for idx, (name, (path, desc)) in enumerate(filtered_gallery.items()):
     with cols[idx % 3]:
-        st.image(path, use_column_width=True)
-        st.markdown(f"<h4 style='text-align:center'>{name}</h4>", unsafe_allow_html=True)
-        if st.button(f"📖 Show Meaning for {name}", key=f"gallery_{idx}", use_container_width=True):
+
+        # عرض الصورة بشكل آمن
+        if isinstance(path, str) and os.path.isfile(path):
+            try:
+                img = Image.open(path).convert("RGB")
+                st.image(img, use_column_width=True)
+            except Exception:
+                st.warning("⚠️ Failed to load image")
+        else:
+            st.warning("⚠️ Image not found")
+
+        st.markdown(
+            f"<h4 style='text-align:center'>{name}</h4>",
+            unsafe_allow_html=True
+        )
+
+        if st.button(
+            f"📖 Show Meaning for {name}",
+            key=f"gallery_{idx}"
+        ):
             st.info(desc)
+
 st.markdown('</div>', unsafe_allow_html=True)
 
 # --- TRIVIA SECTION ---
@@ -647,4 +676,5 @@ st.markdown('</div>', unsafe_allow_html=True)
 # --- CLEANUP (Your original code) ---
 if os.path.exists("temp_hieroglyph.jpg"):
     os.remove("temp_hieroglyph.jpg")
+
 
