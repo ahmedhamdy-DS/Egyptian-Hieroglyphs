@@ -566,7 +566,7 @@ for idx, (name, (img_path, desc)) in enumerate(filtered_pharaohs.items()):
         # 3️⃣ العرض الآمن
         # -----------------------------
         if image_obj is not None:
-            st.image(image_obj, use_container_width=True)
+            st.image(image_obj, use_coulmn_width=True)
         else:
             st.warning(f"⚠️ Image not found for {name}")
 
