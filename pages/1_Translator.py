@@ -611,7 +611,7 @@ st.subheader("🏺 Explore the Hieroglyphic Museum")
 gallery = {
     "Ankh (☥)": ("assets/Ankh.jpg", code_to_info["N14"][1]),
     "Eye of Horus (Udjat)": ("assets/Eye_of_Horus.jpg", code_to_info["D2"][1]),
-    "Scarab": ("assets/scarab.jpg", code_to_info["L1"][1]),
+    "Scarab": ("assets/Scarab.jpg", code_to_info["L1"][1]),
     "Ra (Sun God)": ("assets/Ra.jpg", code_to_info["R1"][1]),
     "Djed (Pillar)": ("assets/djed.jpg", code_to_info["F9"][1]),
     "Was Scepter": ("assets/was.jpg", code_to_info["S40"][1])
