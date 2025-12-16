@@ -527,52 +527,54 @@ from PIL import Image
 # شريط البحث
 search_pharaoh = st.text_input("🔍 Search for a Pharaoh (e.g., Tutankhamun, Ramses II):", key="pharaoh_search").strip().lower()
 filtered_pharaohs = {k: v for k, v in pharaohs.items() if search_pharaoh in k.lower()} if search_pharaoh else pharaohs
-
 cols = st.columns(3)
 
 for idx, (name, (img_path, desc)) in enumerate(filtered_pharaohs.items()):
     with cols[idx % 3]:
-        
-        # --- خطوة الحماية الأولى: التأكد أن مسار الصورة نص وليس فارغاً ---
-        # إذا كان img_path فارغاً أو ليس نصاً، نتخطى محاولة فتح الصورة
-        if not img_path or not isinstance(img_path, str):
-            st.warning(f"⚠️ الصورة غير معرفة لـ: {name}")
-            # نعرض الاسم والوصف فقط ثم ننتقل للعنصر التالي
+
+        # -----------------------------
+        # 1️⃣ التحقق من مسار الصورة
+        # -----------------------------
+        if not isinstance(img_path, str) or img_path.strip() == "":
+            st.warning(f"⚠️ No image defined for {name}")
             st.markdown(f"<h4 style='text-align:center'>{name}</h4>", unsafe_allow_html=True)
             with st.expander(f"📖 Read about {name}"):
                 st.info(desc)
-            continue 
+            continue
 
-        # --- 2. البحث عن الصورة بأمان ---
+        # -----------------------------
+        # 2️⃣ محاولة تحميل الصورة بأمان
+        # -----------------------------
         image_obj = None
-        
-        # تعريف المسارات المحتملة (الآن نحن متأكدون أن img_path نص سليم)
-        possible_paths = [
-            img_path,                       # المسار المباشر
-            f"../{img_path}",               # الرجوع للخلف (للـ pages)
-            os.path.join(".", img_path)     # المسار النسبي الحالي
-        ]
-        
-        for path in possible_paths:
-            # نتأكد أن الملف موجود قبل محاولة فتحه
-            if os.path.exists(path):
-                try:
-                    loaded_img = Image.open(path)
-                    image_obj = loaded_img
-                    break 
-                except Exception:
-                    continue
 
-        # --- 3. العرض ---
-        if image_obj:
+        possible_paths = [
+            img_path,                            # assets/xxx.jpg
+            os.path.join("assets", os.path.basename(img_path)),  # تأمين إضافي
+            os.path.join("..", img_path),        # عند التشغيل من pages
+        ]
+
+        for path in possible_paths:
+            if os.path.isfile(path):
+                try:
+                    image_obj = Image.open(path)
+                    image_obj = image_obj.convert("RGB")  # مهم جدًا
+                    break
+                except Exception as e:
+                    image_obj = None
+
+        # -----------------------------
+        # 3️⃣ العرض الآمن
+        # -----------------------------
+        if image_obj is not None:
             st.image(image_obj, use_container_width=True)
         else:
-            st.warning(f"⚠️ الملف غير موجود: {name}")
+            st.warning(f"⚠️ Image not found for {name}")
 
         st.markdown(f"<h4 style='text-align:center'>{name}</h4>", unsafe_allow_html=True)
 
         with st.expander(f"📖 Read about {name}"):
             st.info(desc)
+
 
 # --- TRANSLATOR SECTION ---
 st.markdown('<hr class="section-divider">', unsafe_allow_html=True)
