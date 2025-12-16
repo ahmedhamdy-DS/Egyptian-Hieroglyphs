@@ -566,7 +566,7 @@ for idx, (name, (img_path, desc)) in enumerate(filtered_pharaohs.items()):
         # 3️⃣ العرض الآمن
         # -----------------------------
         if image_obj is not None:
-            st.image(image_obj, use_coulmn_width=True)
+            st.image(image_obj, use_column_width=True)
         else:
             st.warning(f"⚠️ Image not found for {name}")
 
@@ -585,7 +585,7 @@ st.write("Upload a photo of a hieroglyph, and our AI model will predict its mean
 uploaded_file = st.file_uploader("Upload a hieroglyph image", type=["jpg", "jpeg", "png"], key="file_uploader", label_visibility="collapsed")
 
 if uploaded_file is not None:
-    st.image(uploaded_file, caption="Uploaded Hieroglyph", use_container_width=True)
+    st.image(uploaded_file, caption="Uploaded Hieroglyph", use_column_width=True)
     temp_path = "temp_hieroglyph.jpg"
     with open(temp_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
