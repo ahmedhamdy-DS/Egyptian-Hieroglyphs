@@ -519,11 +519,6 @@ pharaohs = {
     "Hatshepsut": ("assets/944d5d3f2aa155d76159ba6cb6a856ee.jpg", "👑 Hatshepsut (1479–1458 BC)\n\nOne of the most successful female pharaohs. She expanded trade networks, commissioned monumental building projects, and ruled Egypt peacefully and effectively."),
     "Khufu": ("assets/74965d3d9b77c730df05ea241c841a54.jpg", "👑 Khufu (Cheops, 2589–2566 BC)\n\nFamous for commissioning the Great Pyramid of Giza, one of the Seven Wonders of the Ancient World. His reign was marked by major construction projects and centralized administration.")
 }
-
-# شريط البحث
-search_pharaoh = st.text_input("🔍 Search for a Pharaoh (e.g., Tutankhamun, Ramses II):", key="pharaoh_search").strip().lower()
-filtered_pharaohs = {k: v for k, v in pharaohs.items() if search_pharaoh in k.lower()} if search_pharaoh else pharaohs
-
 import os
 from PIL import Image
 
