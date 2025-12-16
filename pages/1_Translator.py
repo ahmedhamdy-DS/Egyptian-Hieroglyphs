@@ -505,10 +505,12 @@ A digital gateway to explore the beauty, mystery, and science of the symbols tha
 st.markdown('<hr class="section-divider">', unsafe_allow_html=True)
 
 
+import os
+from PIL import Image
+
 # --- PHARAOHS SECTION ---
 st.markdown('<div class="section">', unsafe_allow_html=True)
 st.subheader("👑 Famous Pharaohs of Ancient Egypt")
-
 
 pharaohs = {
     "Tutankhamun": ("assets/c799e617f29aadf5f49b522968e60af6.jpg", "👑 Tutankhamun (King Tut, 1332–1323 BC)\n\nTutankhamun became pharaoh at a very young age. He is famous for his intact tomb discovered in 1922 by Howard Carter, which revealed a treasure trove of Egyptian artifacts."),
@@ -518,57 +520,51 @@ pharaohs = {
     "Khufu": ("assets/74965d3d9b77c730df05ea241c841a54.jpg", "👑 Khufu (Cheops, 2589–2566 BC)\n\nFamous for commissioning the Great Pyramid of Giza, one of the Seven Wonders of the Ancient World. His reign was marked by major construction projects and centralized administration.")
 }
 
+# شريط البحث
 search_pharaoh = st.text_input("🔍 Search for a Pharaoh (e.g., Tutankhamun, Ramses II):", key="pharaoh_search").strip().lower()
 filtered_pharaohs = {k: v for k, v in pharaohs.items() if search_pharaoh in k.lower()} if search_pharaoh else pharaohs
 
-import os
-
-
-
+# بداية عرض الأعمدة
 cols = st.columns(3)
 
-for idx, (name, (img, desc)) in enumerate(filtered_pharaohs.items()):
+for idx, (name, (img_path, desc)) in enumerate(filtered_pharaohs.items()):
     with cols[idx % 3]:
-        # 1. تحديد المسار الصحيح للصورة
-        final_image_path = None
         
-        if os.path.exists(img):
-            # الحالة الأولى: المسار صحيح كما هو
-            final_image_path = img
-        elif os.path.exists(f"../{img}"):
-            # الحالة الثانية: الصورة في المجلد الرئيسي (عند التشغيل من pages)
-            final_image_path = f"../{img}"
-            
-        # 2. عرض الصورة أو رسالة خطأ
-        if final_image_path:
-            st.image(final_image_path, caption=name, use_container_width=True)
+        # --- 1. منطق معالجة الصورة (لمنع الـ TypeError) ---
+        image_obj = None
+        
+        # قائمة بالمسارات المحتملة (المسار المباشر، والرجوع للخلف خطوة لأننا داخل pages)
+        possible_paths = [
+            img_path,                 # assets/image.jpg
+            f"../{img_path}",         # ../assets/image.jpg
+            os.path.join(".", img_path) # ./assets/image.jpg
+        ]
+        
+        # محاولة فتح الصورة من المسارات المتاحة
+        for path in possible_paths:
+            if os.path.exists(path):
+                try:
+                    loaded_img = Image.open(path)
+                    image_obj = loaded_img
+                    break # وجدنا الصورة، نخرج من التكرار
+                except:
+                    continue # الملف موجود لكنه تالف، نجرب المسار التالي
+
+        # --- 2. العرض ---
+        if image_obj:
+            st.image(image_obj, use_container_width=True)
         else:
+            # صورة بديلة أو رسالة في حال عدم العثور على الصورة
             st.warning(f"⚠️ الصورة غير متاحة: {name}")
-            
-        # 3. عرض الوصف (Description)
-        with st.expander("اقرأ المزيد"):
-            st.write(desc)
-            
 
-cols = st.columns(3)
-for idx, (name, (img, desc)) in enumerate(filtered_pharaohs.items()):
-    with cols[idx % 3]:
-        # 1. عرض الصورة
-        # نتأكد إن المسار مش فاضي وإن الملف موجود فعلاً
-        if img and os.path.exists(img):
-            st.image(img, use_container_width=True)
-        else:
-            # لو الصورة مش موجودة، نعرض تحذير أو صورة بديلة
-            st.warning(f"الصورة غير متاحة: {name}")
-            # لو عندك صورة placeholder ممكن تفعل السطر ده:
-            # st.image("assets/placeholder.jpg", use_container_width=True) 
-
-        # 2. عرض الاسم
+        # عرض الاسم
         st.markdown(f"<h4 style='text-align:center'>{name}</h4>", unsafe_allow_html=True)
 
-        # 3. عرض الزرار والمعلومات (مرة واحدة فقط)
-        if st.button(f"📖 Show Info for {name}", key=f"pharaoh_{idx}", use_container_width=True):
+        # عرض التفاصيل داخل Expander
+        with st.expander(f"📖 Read about {name}"):
             st.info(desc)
+
+st.markdown('</div>', unsafe_allow_html=True)
 
 # --- TRANSLATOR SECTION ---
 st.markdown('<hr class="section-divider">', unsafe_allow_html=True)
