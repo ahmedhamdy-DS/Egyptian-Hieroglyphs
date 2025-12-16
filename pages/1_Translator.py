@@ -521,27 +521,34 @@ pharaohs = {
 search_pharaoh = st.text_input("🔍 Search for a Pharaoh (e.g., Tutankhamun, Ramses II):", key="pharaoh_search").strip().lower()
 filtered_pharaohs = {k: v for k, v in pharaohs.items() if search_pharaoh in k.lower()} if search_pharaoh else pharaohs
 
-cols = st.columns(3)
-
 import os
 
+
+
 cols = st.columns(3)
+
 for idx, (name, (img, desc)) in enumerate(filtered_pharaohs.items()):
     with cols[idx % 3]:
-
-        if img and os.path.exists(img):
-            st.write("Debug info:", img) 
-            st.write("Type:", type(img)) 
-            st.image(img, use_container_width=True)
-        else:
-           
-            st.warning(f"الصورة غير متاحة: {name}")
+        # 1. تحديد المسار الصحيح للصورة
+        final_image_path = None
+        
+        if os.path.exists(img):
+            # الحالة الأولى: المسار صحيح كما هو
+            final_image_path = img
+        elif os.path.exists(f"../{img}"):
+            # الحالة الثانية: الصورة في المجلد الرئيسي (عند التشغيل من pages)
+            final_image_path = f"../{img}"
             
-
-# --- قسم الفراعنة (Pharaohs Section) ---
-import os 
-
-# تأكد إن المتغير filtered_pharaohs متعرف قبله
+        # 2. عرض الصورة أو رسالة خطأ
+        if final_image_path:
+            st.image(final_image_path, caption=name, use_container_width=True)
+        else:
+            st.warning(f"⚠️ الصورة غير متاحة: {name}")
+            
+        # 3. عرض الوصف (Description)
+        with st.expander("اقرأ المزيد"):
+            st.write(desc)
+            
 
 cols = st.columns(3)
 for idx, (name, (img, desc)) in enumerate(filtered_pharaohs.items()):
