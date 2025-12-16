@@ -530,6 +530,8 @@ for idx, (name, (img, desc)) in enumerate(filtered_pharaohs.items()):
     with cols[idx % 3]:
 
         if img and os.path.exists(img):
+            st.write("Debug info:", img) 
+            st.write("Type:", type(img)) 
             st.image(img, use_container_width=True)
         else:
            
